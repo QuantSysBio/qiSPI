@@ -26,6 +26,34 @@ The ID under which your quantification results should appear in the final kineti
 If you are processing proteins, save their sequence in a single-entry `.fasta` file and deploy it in `INPUT/sequences/`. Specify the name of the `.fasta` file in the `substrateSeq` column of the sample list.
 Alternatively, you can paste the entire protein/peptide sequence into the corresponding list entry (only recommended for polypeptides).
 
+#### digestTime
+Time point after which the digestion was stopped. **Please provide the time in hours!** For instance, if the digestion time is 15 min, enter 0.25. **Do not put any units in this column!**  
+Zero-hours time points are treated as control measurements. Please enter *0* as time point for the control measurements.
+
+#### biological_replicate
+Number of the biological (NOT technical!) replicate. In the final kinetics, the mean over all technical replicates is calculated, whereas biological replicates are displayed separately. Please have a look at the full sample list (`INPUT/sample_list.csv`) for clarification.
+
+#### order
+Order in which the .raw files were processed in Mascot Distiller. **This column is important for matching the time points to the correct intensities!**. The first sample processed should be labelled *Ref*. All subsequent samples should be labelled as *C1, C2, C3, ....*. Please have a look at the full sample list (`INPUT/sample_list.csv`) for clarification.
+
+#### raw_file
+Provide the **full** name (including .raw suffix) of the .raw file for the respective sample. Note that you do NOT have to provide the .raw files for the pipeline. The name of the .raw file is solely required as information during sample processing.
+
+#### search_result
+Provide the **full** name (including .csv suffix) of the sample's search result file. Deploy all search result files in the `INPUT/search_results/` folder.
+
+#### quantitation_result
+Put the file name of the table matches in this entry. Table matches should be provided as `.txt`, `.csv` or `.html` files. Note that the pipeline is tested for the `.txt` file format.  
+Deploy the respective file in `INPUT/quantitation_results/`. **They should not contain any headers!**  
+If you are processing multiple proteins/polypeptides at once, make sure to rename the files so that each protein/polypeptide is processed using a distinct quantification file. Please have a look at the full sample list (`INPUT/sample_list.csv`) for clarification.
+
+#### peptide_quantification
+Put the file name of the peptide quantification file in this entry. Table matches should be provided as `.txt`, `.csv` files. Note that the pipeline is tested for the `.csv` file format.  
+Deploy the respective file in `INPUT/quantitation_results/`.  **They should not contain any headers!**  
+If you are processing multiple proteins/polypeptides at once, make sure to rename the files so that each protein/polypeptide is processed using a distinct quantification file. Please have a look at the full sample list (`INPUT/sample_list.csv`) for clarification.
+
+
+
 ## execution
 qiSPI relies on [Conda](https://docs.conda.io/en/latest/) and Snakemake.
 In order to install Conda, click on this [link](https://docs.conda.io/en/latest/miniconda.html) and follow the installation guidelines for your respective operating system.  
