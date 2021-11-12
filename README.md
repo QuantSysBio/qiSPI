@@ -52,9 +52,41 @@ Put the file name of the peptide quantification file in this entry. Table matche
 Deploy the respective file in `INPUT/quantitation_results/`.  **They should not contain any headers!**  
 If you are processing multiple proteins/polypeptides at once, make sure to rename the files so that each protein/polypeptide is processed using a distinct quantification file. Please have a look at the full sample list (`INPUT/sample_list.csv`) for clarification.
 
+## config
+Please have a look at `INPUT/config.yaml`.
+```
+protein_name:
+  - aSyn
+  - OPN-C
+KK: 0.05
+IONscore: 20
+thrDif: 0.3
+thrDifpcp: 0.3
+PCPthresh: 50
+PSPthresh: 90
+rm_tmp: "no"
+```
 
+Please enter the names of all proteins that should be processed together under `protein_name` following the syntax that is given.
+**The protein names have to be identical to those in the protein_name column in the sample list!**  
+
+Next, the config file contains hyperparameters for sample processing. Leave them unchanged unless you have a reason to change them.
+The last parameter, `rm_tmp` specifies whether temporarily generated files (unfiltered kinetics for each sample) should be removed upon pipeline completion. This is recommended since intermediate files are redundant and occupy a lot of disk space. If you want to remove them, enter `"yes"`. Make sure to use `"` since plain `yes` or  `no` are treated as Boolean in `.yaml` file format.
 
 ## execution
+### Remarks on I/O
+Please make sure to follow exactly the instructions given above.
+The user must provide as an input:
+- search result files deployed in `INPUT/search_results`
+- quantification results (without header!) in `INPUT/quantitation_results`
+- protein/peptide sequences in `INPUT/sequences`
+
+As an output, you will get most importantly:
+- `finalKinetics.csv` in the `OUTPUT/protein_name/` subfolder containing information about peptide sequence, mean intensities over technical replicate at each time point, product type and positions, among others.
+- `finalKinetics.pdf` in the `OUTPUT/protein_name/PLOTS/` subfolder containing a visualisation of all kinetics sorted decreasingly by intensity.
+- `KineticsDB.csv` file in the `OUTPUT/` folder containing the quantification results of **all proteins that were processed simultaneously** sorted by peptide/biological replicate
+
+### Snakemake and Conda
 qiSPI relies on [Conda](https://docs.conda.io/en/latest/) and Snakemake.
 In order to install Conda, click on this [link](https://docs.conda.io/en/latest/miniconda.html) and follow the installation guidelines for your respective operating system.  
 After installing Conda, you need to install Snakemake. The Snakemake installation procedure is described [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
@@ -68,8 +100,13 @@ Additionally, you might need to run `conda update conda`.
 Download this repository as a .zip file (click on *Code* at the upper right corner of this repository --> Download ZIP), move the .zip file in the desired directory on your computer and unpack it.
 Open the terminal in this directory and enter: `conda activate snakemake`.
 
+### qiSPI execution
+Make sure that you are in the correct directory of your terminal. After entering `pwd` into the terminal, it should display `./qiSPI` or `./qiSPI-main`.  
+
 The pipeline can be executed by pasting `snakemake --use-conda --cores all -R parse_input` into the terminal. The progress of the pipeline execution should appear in your terminal window.
 In case you have installed an older version of Conda/Snakemake and encounter an error when executing the pipeline, try executing
 `snakemake --use-conda --cores all -R parse_input --conda-frontend conda`.
 
 After your jobs finished, enter `conda deactivate` in order to terminate your Conda environment.
+
+In the `OUTPUT/` directory, you should find subfolders containing the quantification results for each protein/polypeptide. Additionally, there should be a `KineticsDB.csv` file containing the quantification results of **all proteins that were processed simultaneously** sorted by peptide/biological replicate. In case you rerun the pipeline with different settings, make sure to re-name `KineticsDB.csv` since it will be overwritten upon re-execution.
