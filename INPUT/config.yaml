@@ -1,0 +1,10 @@
+protein_name:
+  - aSyn
+  - OPN-C
+KK: 0.05
+IONscore: 20
+thrDif: 0.3
+thrDifpcp: 0.3
+PCPthresh: 50
+PSPthresh: 90
+rm_tmp: "no"

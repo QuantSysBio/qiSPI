@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+  - bioconda
+  - r
+
+dependencies:
+  - r-base=4.1.0
+  - r-seqinr=4.2_5
+  - r-stringr=1.4.0
+  - r-plyr=1.8.6
+  - r-dplyr=1.0.7
+  - r-xml=3.99
+  - r-gtools=3.9.2
+  - r-rcolorbrewer=1.1_2
