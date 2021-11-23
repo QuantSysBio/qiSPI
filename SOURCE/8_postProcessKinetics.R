@@ -77,6 +77,8 @@ for (p in prots) {
     
     names(reps) = c(1:(counter-1))
     numReps = length(reps)
+    paste0("number of replicates: ", numReps) %>%
+        print()
     
     # ----- aggregate all charges and PTMs by summation -----
     su = unique(as.vector(rep[[1]]$sequence))
@@ -104,6 +106,9 @@ for (p in prots) {
     }
     
     
+    paste0("size of results: ", length(results)) %>%
+        print()
+    
     # ----- get all peptides detected at t=0 -----
     ctrlInd = which(cnt$digestTime == 0 | cnt$digestTime == "CTRL")
     
@@ -123,7 +128,6 @@ for (p in prots) {
         # ----- remove all control peptides as such -----
         k2 = which(gsub("I","L",results[[1]][,1]) %in% ctrlPSP)
         k = k2
-        k = numeric()
         if(length(k)>0){
             for(i in 1:numReps){
                 results[[i]] = results[[i]][-k,]

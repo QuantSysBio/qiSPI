@@ -137,32 +137,6 @@ for (p in prots) {
         M[[j]] = M[[j]][ind,]
     }
     
-    # ----- plot filtered means -----
-    pdf(paste0(outdir,"filtered_means_imputed_sorted.pdf"), width=10, height=10)
-    par(mfrow = c(4,5))
-    
-    for(i in 1:dim(M[[1]])[1]){
-        
-        maxi = 0
-        mini = 10**20
-        for(j in 1:length(M)){
-            maxi = max(c(maxi,as.numeric(as.vector(M[[j]][i,]))))
-            mini = min(c(mini,as.numeric(as.vector(M[[j]][i,]))))
-        }
-        
-        plot(1,1,type="b",col="white",xlim=c(0,max(t)),axes=FALSE,main=paste(i,results[[j]][i,dim(results[[j]])[2]],sep="_"),ylim=c(mini,maxi),xlab="time",ylab="Intensity")
-        axis(1)
-        axis(2)
-        
-        for(j in 1:length(M)){
-            points(t,M[[j]][i,],type="b",col=myColors[j])
-        }
-        
-    }
-    
-    dev.off()
-    
-    
     # ----- save filtered results -----
     
     filteredResults = results
