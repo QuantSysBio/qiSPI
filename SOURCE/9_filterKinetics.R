@@ -82,6 +82,33 @@ for (p in prots) {
     dev.off()
     
     
+    # ----- subtract noise -----
+    for (r in 1:length(results)) {
+        df = results[[r]][, c(2:(1+length(t)))]
+        
+        # subtract minimum intensity
+        tmp = apply(df, 1, function(x) {
+            x = as.numeric(x)
+            k = which.min(x)
+            
+            x = x - x[k]
+            return(x)
+            
+        }) %>%
+            t() %>%
+            as.data.frame()
+        
+        names(tmp) = names(df) 
+        
+        # set 0 hour tp to 0
+        z = which(names(tmp) %in% c(0, "CTRL"))
+        if (length(z) > 0) {
+            tmp[,z] = 0
+        }
+        
+        results[[r]][, c(2:(1+length(t)))] = tmp
+    }
+    
     # ----- get mean over technical replicates -----
     
     pdf(paste0(outdir,"unfiltered_means.pdf"), width=10, height=10)
