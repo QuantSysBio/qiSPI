@@ -37,7 +37,7 @@ for (q in qresults) {
     qfile = paste0(QUANTITATIONRESULTS_PATH, q)
     if (grepl(".txt",q)) {
         d = read.table(qfile,header=TRUE)
-    } else if (grepl(".txt",q)) {
+    } else if (grepl(".csv",q)) {
         d = read.csv(qfile, stringsAsFactors = F)
     } else if (grepl(".html",q)) {
         d = readHTMLTable(qfile, header = TRUE, as.data.frame = TRUE, which = 2)
