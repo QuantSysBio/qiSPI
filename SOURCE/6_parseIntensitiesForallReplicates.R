@@ -36,7 +36,7 @@ for (q in qpeps) {
     if (grepl(".csv", infile)) {
         quant = read.csv(infile, stringsAsFactors = F)
     } else if (grepl(".txt", infile)) {
-        quant = read.table(infile,header=TRUE)
+        quant = read.csv(infile, stringsAsFactors = F, sep = "\t")
     }
     
     FF = gsub(".raw","",sample_list$raw_file[sample_list$peptide_quantification == q])
