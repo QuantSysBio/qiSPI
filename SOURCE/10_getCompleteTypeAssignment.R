@@ -161,6 +161,12 @@ for (p in prots) {
     Kinetics.DF.pasted$intensities = do.call(paste, c(Kinetics.DF.pasted[xx], sep=";"))
     
     allKinetics[[counter]] = Kinetics.DF.pasted[,-which(grepl("tp_", names(Kinetics.DF.pasted)))]
+    
+    # peptides only
+    pepList = allKinetics[[counter]][,c("substrateID","substrateSeq","pepSeq",
+                                        "productType", "spliceType", "positions",
+                                        "digestTimes")] %>% unique()
+    
     counter = counter + 1
     
     ### OUTPUT ###
@@ -170,6 +176,9 @@ for (p in prots) {
          file=paste0("OUTPUT/",p,"/filteredMeans_final.RData"))
     write.csv(Kinetics.DF,
               file = paste0("OUTPUT/",p,"/finalKinetics.csv"),
+              row.names = F)
+    write.csv(pepList,
+              file = paste0("OUTPUT/",p,"/pepList.csv"),
               row.names = F)
     
 }
