@@ -1,4 +1,4 @@
-### iqSPI ###
+### qiSPI ###
 # description:  post-processing of kinetics
 # input:        sample list, quantification results per biological replicate,
 #               protein sequence, psp.RData, pcp.RData
@@ -101,7 +101,6 @@ for (p in prots) {
             if(length(k)==1){
                 results[[j]][i,2:(length(t)+1)] = as.numeric(as.vector(reps[[j]][k,(c+1):(length(t)+c)]))
             }
-            
         }
     }
     

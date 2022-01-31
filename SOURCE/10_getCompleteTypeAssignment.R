@@ -1,4 +1,4 @@
-## iqSPI ###
+## qiSPI ###
 # description:  assign product types to filtered means/results, plot final kinetics
 # input:        filtered results/means, protein sequences
 # output:       final filtered results/means
@@ -6,7 +6,7 @@
 
 library(dplyr)
 library(seqinr)
-source("SOURCE/loadFunctions.r")
+source("SOURCE/qiSPI_utils.R")
 
 print("----------------------------------------------------------")
 print("10) COMPLETE TYPE ASSIGNMENT, FINAL KINETICS AND MERGED DB")
@@ -53,55 +53,21 @@ for (p in prots) {
     } else {
         proteome = si
     }
-    proteome = gsub("I", "L", proteome)
     
-    # ----- replace all Is with Ls to find alternative sequences -----
-    seqSub <- gsub("I", "L", as.vector(filteredResults[[1]]$sequence))
+    
     
     # ----- get assignment ----
-    positions = rep(NA,length(seqSub))
-    spliceType = rep("non-spliced",length(seqSub))
+    #substrateSeq, productType, spliceType, pepSeq
     
-    for (i in 1:length(seqSub)){
-        
-        
-        s = gsub("I","L",as.vector(seqSub[i]))
-        substrate = gsub("I","L",as.vector(proteome))
-        x = getPositions(s,substrate)
-        
-        #PCP
-        if(dim(x)[2]==2){
-            positions[i] = paste(apply(x,1,paste,collapse="_"),collapse=";")
-        }
-        
-        #PSP
-        if(dim(x)[2]>2){
-            if(dim(x)[2]==5 & dim(x)[1]>1){
-                positions[i] = paste(apply(x[,-1],1,paste,collapse="_"),collapse=";")
-            }
-            if(dim(x)[2]==5 & dim(x)[1]==1){
-                positions[i] = paste(x[,-1],collapse="_")
-            }
-            
-            types = rep("cis",dim(x)[1])
-            intv = as.numeric(x[,4])-as.numeric(x[,3])
-            k = which(intv<=0)
-            if(length(k)>0){
-                types[k] = "revCis"
-                k2 = which(as.numeric(x[k,2])<=as.numeric(x[k,5]) & as.numeric(x[k,3])>=as.numeric(x[k,4]))
-                if(length(k2)>0){
-                    types[k[k2]] = "trans"
-                }
-            }
-            spliceType[i] = paste(types,collapse=";")
-            
-        }
-    }
+    filteredResults = lapply(filteredResults, function(df) {
+        df %>%
+            mutate(substrateSeq = proteome,
+                   pepSeq = sequence,
+                   productType = toupper(types),
+                   spliceType = NA) %>%
+            mapping()
+    })
     
-    # ----- format results -----
-    for(i in 1:length(filteredResults)){
-        filteredResults[[i]] = cbind(filteredResults[[i]],positions,spliceType)
-    }
     
     # ----- plot final kinetics -----
     pdf(paste0("OUTPUT/",p,"/PLOTS/finalKinetics.pdf"), width=10, height=10)
@@ -136,7 +102,8 @@ for (p in prots) {
     
     # ----- format and save results -----
     for(i in 1:length(M)){
-        filteredMeans[[i]] = cbind(filteredResults[[i]]$sequence,M[[i]],filteredResults[[i]]$types, positions,spliceType)
+        filteredMeans[[i]] = cbind(filteredResults[[i]]$pepSeq,M[[i]],filteredResults[[i]]$productType,
+                                   filteredResults[[i]]$positions,filteredResults[[i]]$spliceType)
     }
     
     filteredMeans = lapply(filteredMeans, function(x) {

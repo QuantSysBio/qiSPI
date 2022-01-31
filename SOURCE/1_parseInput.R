@@ -1,4 +1,4 @@
-### iqSPI ###
+### qiSPI ###
 # description:  - remove headers from search result files
 #               - create temporary output directories
 # input:        sample list

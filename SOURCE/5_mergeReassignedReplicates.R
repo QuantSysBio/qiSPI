@@ -1,4 +1,4 @@
-### iqSPI ###
+### qiSPI ###
 # description:  reassign types of quantitation queries
 # input:        sample list, re-assigned quantitation results, protein sequences
 # output:       mapping (merged over replicates)

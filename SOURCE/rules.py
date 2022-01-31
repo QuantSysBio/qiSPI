@@ -40,10 +40,9 @@ rule extract_peptides:
 			protein_name=config["protein_name"])
 	params:
 		protein_name = config["protein_name"],
-		KK = config["KK"],
-		IONscore = config["IONscore"],
-		thrDif = config["thrDif"],
-		thrDifpcp = config["thrDifpcp"]
+		q_value = config["q_value"],
+		ion_score = config["ion_score"],
+		delta_score = config["delta_score"]
 	conda:
 		"dependencies.yaml"
 	script:

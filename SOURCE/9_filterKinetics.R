@@ -1,4 +1,4 @@
-## iqSPI ###
+## qiSPI ###
 # description:  plot processed kinetics, aggregate over mean per replicate
 # input:        results.RData
 # output:       plotted kinetics
@@ -110,15 +110,18 @@ for (p in prots) {
     }
     
     # ----- get mean over technical replicates -----
+    bioReps = cnt$biological_replicate[cnt$digestTime == t[1]] %>% 
+        unique()
+    
+    M = list()
+    for (b in bioReps) {
+        M[[b]] = matrix(NA,dim(results[[1]])[1],length(t))
+    }
     
     pdf(paste0(outdir,"unfiltered_means.pdf"), width=10, height=10)
     par(mfrow = c(4,5))
-    M = list()
-    M[[1]] = matrix(NA,dim(results[[1]])[1],length(t))
-    M[[2]] = matrix(NA,dim(results[[1]])[1],length(t))
     
     for(i in 1:dim(results[[1]])[1]){
-        
         
         maxi = 0
         mini = 10**20
@@ -127,22 +130,30 @@ for (p in prots) {
             mini = min(c(mini,as.numeric(as.vector(results[[j]][i,2:(1+length(t))]))))
         }
         
-        plot(1,1,type="b",col="white",xlim=c(0,max(t)),axes=FALSE,main=paste(i,results[[j]][i,dim(results[[j]])[2]],sep="_"),ylim=c(mini,maxi),xlab="time",ylab="Intensity")
+        plot(1,1,type="b",col="white",xlim=c(0,max(t)),
+             axes=FALSE,
+             main=paste(i,results[[j]][i,dim(results[[j]])[2]],sep="_"),
+             ylim=c(mini,maxi),xlab="time",ylab="Intensity")
+        
         axis(1)
         axis(2)
         
-        x = rbind(as.numeric(as.vector(results[[1]][i,2:(1+length(t))])),as.numeric(as.vector(results[[2]][i,2:(1+length(t))])))
-        m = apply(x,2,mean)
-        points(t,m,type="b",col=myColors[1])
-        M[[1]][i,] = m
-        
-        x = rbind(as.numeric(as.vector(results[[3]][i,2:(1+length(t))])),as.numeric(as.vector(results[[4]][i,2:(1+length(t))])))
-        m = apply(x,2,mean)
-        points(t,m,type="b",col=myColors[3])
-        M[[2]][i,] = m
-        
-        
+        for (b in bioReps) {
+            
+            bb = which(cnt$biological_replicate[cnt$digestTime == t[1]] == b)
+            x = sapply(results[bb], function(arg) {
+                as.numeric(as.vector(arg[i,2:(1+length(t))]))
+            }) %>%
+                as.matrix() %>%
+                t()
+            
+            m = apply(x,2,mean)
+            points(t,m,type="b",col=myColors[2*b-1])
+            M[[b]][i,] = m
+            
+        }
     }
+    
     
     dev.off()
     

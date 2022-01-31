@@ -1,4 +1,4 @@
-### iqSPI ###
+### qiSPI ###
 # description:  parse intensities for all replicates
 # input:        sample list, peptide quantification results, mapping
 # output:       quantities (merged over replicates)

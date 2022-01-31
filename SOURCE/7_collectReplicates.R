@@ -1,4 +1,4 @@
-### iqSPI ###
+### qiSPI ###
 # description:  split quantities according to biological replicates
 # input:        sample list, merged quantification results
 # output:       quantities (merged over replicates)

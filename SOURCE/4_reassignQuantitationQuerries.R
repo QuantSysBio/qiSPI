@@ -1,4 +1,4 @@
-### iqSPI ###
+### qiSPI ###
 # description:  reassign types of quantitation queries
 # input:        sample list, psps and pcps, quantitation results, num queries
 # output:       re-assigned quantitation results
@@ -44,14 +44,14 @@ for (p in prots) {
     load(file=paste0("OUTPUT/tmp/",p,"/",indir,"/pcp.RData"))
     load(file=paste0("OUTPUT/tmp/",p,"/",indir,"/psp.RData"))
     
-    pcpQuery = as.numeric(as.vector(pcp$pep_query))
-    pspQuery = as.numeric(as.vector(psp$pep_query))
+    pcpQuery = as.numeric(as.vector(pcp$scanNum))
+    pspQuery = as.numeric(as.vector(psp$scanNum))
     
-    pcpSeq = as.vector(pcp$pep_seq)
-    pspSeq = as.vector(psp$pep_seq)
+    pcpSeq = as.vector(pcp$pepSeq)
+    pspSeq = as.vector(psp$pepSeq)
     
-    pcpACC = as.vector(pcp$prot_acc)
-    pspACC = as.vector(psp$prot_acc)
+    pcpACC = as.vector(pcp$positions)
+    pspACC = as.vector(psp$positions)
     
     
     #----- load quantitation results -----
