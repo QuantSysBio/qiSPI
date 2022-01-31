@@ -104,7 +104,7 @@ for (si in seqs) {
         dat$substrateID = cnt$substrateID[c]
         dat$substrateSeq <- proteome
         dat$digestTime <- cnt$digestTime[c]
-        dat$runID = paste(cnt$substrateID[c], cnt$digestTime[c], sample_list$biological_replicate[c], sep = "-")
+        dat$runID = gsub(".raw","",cnt$raw_file[c])
         
         # assign substrate hits as PCP
         substratehits = which(dat$substrateSeq == dat$pepSeq)
