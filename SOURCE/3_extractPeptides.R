@@ -36,14 +36,16 @@ load(snakemake@input[["rawNames"]])
 
 
 ### MAIN PART ###
-seqs = sample_list$substrateSeq %>%
+pnames = sample_list$protein_name %>%
     unique()
 
-for (si in seqs) {
+for (pn in pnames) {
     
     print("--------------------------")
-    paste0("LOADING: ", si) %>% print()
+    paste0("LOADING: ", pn) %>% print()
     print("--------------------------")
+    
+    si = sample_list$substrateSeq[sample_list$protein_name == pn][1]
     
     if (grepl(".fasta", si)) {
         protInfile = paste0(PROTEINSEQUENCES_PATH, "/", si)
@@ -53,7 +55,7 @@ for (si in seqs) {
     }
     
     
-    cnt = sample_list[sample_list$substrateSeq == si,]
+    cnt = sample_list[sample_list$protein_name == pn,]
     
     for (c in 1:nrow(cnt)) {
         
