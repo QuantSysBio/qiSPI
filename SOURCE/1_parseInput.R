@@ -1,4 +1,4 @@
-### qiSPI ###
+### iqSPI ###
 # description:  - remove headers from search result files
 #               - create temporary output directories
 # input:        sample list
@@ -66,15 +66,7 @@ for (pp in 1:length(prots)) {
     
     # remove header from search result file
     start = grep("prot_hit_num",i1)
-    currentSearchFile = read.table(paste0(SEARCHRESULTS_PATH, cnt$search_result[i]),
-                                   skip = start-1,
-                                   sep = ",", header = TRUE, fill = TRUE)
-    
-    kk = which(currentSearchFile$prot_hit_num == "")
-    if (length(kk) > 0) {
-      kk = min(kk)
-      currentSearchFile = currentSearchFile[c(1:(kk-2)),]
-    }
+    end = grep("Peptide matches not assigned to protein hits",i1)-1
     
     tmp = i1[grep("Number of queries",i1)]
     cntNumQueries[i] = as.numeric(strsplit(tmp,split=",")[[1]][2])
@@ -83,9 +75,15 @@ for (pp in 1:length(prots)) {
     cntRawNames[i] = cnt$order[i]
     names(cntRawNames)[i] = gsub(".raw","",raw)
     
-    search_results = currentSearchFile
-    write.csv(search_results, row.names = F,
-              file = paste0(outdir, "/searchResults.csv"))
+    if(length(end) > 0) {
+      search_results = i1[start:end]
+    } else {
+      search_results = i1[start:length(i1)]
+    }
+    
+    write(search_results,
+          file = paste0(outdir, "/searchResults.csv"),
+          ncolumns=1)
     
   }
   
