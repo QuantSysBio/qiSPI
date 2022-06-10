@@ -120,7 +120,7 @@ for (p in prots) {
         allPSP = c()
         for(i in 1:length(ctrlInd)){
             load(file=paste0("OUTPUT/tmp/",p,"/",FF[ctrlInd[i]],"/psp.RData"))
-            allPSP = c(allPSP,as.vector(psp$pep_seq))
+            allPSP = c(allPSP,as.vector(psp$pepSeq))
         }
         ctrlPSP = unique(gsub("I","L",unique(allPSP)))
         
